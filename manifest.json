@@ -1,0 +1,11 @@
+{
+  "display_name": "ComfyUI 插图（移动端 / TauriTavern 版）",
+  "loading_order": 100,
+  "requires": [],
+  "optional": [],
+  "js": "index.js",
+  "css": "style.css",
+  "author": "soulostar (original userscript) / iOS port",
+  "version": "1.0.0",
+  "homePage": "https://github.com/"
+}

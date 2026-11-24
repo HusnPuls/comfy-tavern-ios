@@ -1,0 +1,124 @@
+/* ComfyUI 插图扩展 —— 面板 / 按钮样式（移动端优先） */
+
+#comfyui-panel {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(95vw, 560px);
+    max-height: min(88vh, 900px);
+    z-index: 10000;
+    color: var(--SmartThemeBodyColor, #dcdcd2);
+    background-color: var(--SmartThemeBlurTintColor, rgba(23, 23, 23, 0.94));
+    border: 1px solid var(--SmartThemeBorderColor, rgba(0, 0, 0, 0.5));
+    border-radius: 10px;
+    box-shadow: 0 6px 24px var(--SmartThemeShadowColor, rgba(0, 0, 0, 0.55));
+    padding: 14px;
+    box-sizing: border-box;
+    backdrop-filter: blur(var(--blurStrength, 10px));
+    flex-direction: column;
+    -webkit-overflow-scrolling: touch;
+}
+
+#comfyui-panel .panel-control-bar {
+    cursor: move;
+    touch-action: none;
+    padding-bottom: 10px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--SmartThemeBorderColor, rgba(0, 0, 0, 0.5));
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+}
+
+#comfyui-panel .panel-control-bar b { font-size: 1.15em; margin-left: 8px; }
+#comfyui-panel .floating_panel_close { cursor: pointer; font-size: 1.5em; padding: 0 4px; }
+#comfyui-panel .floating_panel_close:hover { opacity: 0.7; }
+#comfyui-panel .comfyui-panel-content { overflow-y: auto; flex-grow: 1; padding-right: 4px; }
+
+#comfyui-panel label {
+    display: block;
+    margin: 8px 0 4px;
+    font-weight: 600;
+    font-size: 0.92em;
+}
+
+#comfyui-panel input[type="text"],
+#comfyui-panel input[type="url"],
+#comfyui-panel input[type="number"],
+#comfyui-panel textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 9px;
+    border-radius: 6px;
+    border: 1px solid var(--SmartThemeBorderColor, #555);
+    background-color: rgba(0, 0, 0, 0.25);
+    color: inherit;
+    font-size: 16px; /* iOS 上小于 16px 会自动放大页面 */
+    margin-bottom: 8px;
+}
+
+#comfyui-panel textarea { min-height: 160px; resize: vertical; font-family: ui-monospace, Menlo, monospace; }
+#comfyui-panel .workflow-info,
+#comfyui-panel .hint { font-size: 0.82em; color: #aaa; margin: 0 0 8px; line-height: 1.45; }
+#comfyui-panel code { background: rgba(255,255,255,.09); padding: 1px 4px; border-radius: 4px; }
+
+.comfy-button {
+    padding: 8px 12px;
+    border: 1px solid rgba(0, 0, 0, 0.6);
+    border-radius: 6px;
+    cursor: pointer;
+    background: linear-gradient(135deg, #2a2a2a, #171717);
+    color: #fff;
+    font-weight: 600;
+    font-size: 14px;
+    transition: opacity 0.2s, background 0.2s;
+    flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+.comfy-button:disabled { opacity: 0.5; cursor: not-allowed; }
+.comfy-button:hover:not(:disabled) { opacity: 0.88; }
+.comfy-button.testing { background: #555; }
+.comfy-button.success { background: linear-gradient(135deg, #28a745, #1e7e34); }
+.comfy-button.error   { background: linear-gradient(135deg, #dc3545, #a71d2a); }
+
+#comfyui-test-conn { min-width: 64px; }
+
+.comfy-url-container { display: flex; gap: 8px; align-items: stretch; }
+.comfy-url-container input { flex: 1 1 auto; margin-bottom: 0; }
+
+.comfy-tags-container { display: flex; gap: 8px; align-items: flex-end; }
+.comfy-tags-container > div { flex: 1 1 0; }
+
+#options > .options-content > a#comfyui-launcher-button,
+#options > .options-content > a#comfyui-auto-toggle { display: flex; align-items: center; gap: 10px; }
+
+.comfy-button-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 6px 4px;
+    flex-wrap: wrap;
+}
+
+.comfy-image-container { margin: 10px 0; max-width: 100%; }
+.comfy-image-container img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid var(--SmartThemeBorderColor, #555);
+}
+
+@media (max-width: 1000px) {
+    #comfyui-panel {
+        top: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 96vw;
+        max-height: calc(100dvh - 16px);
+        padding: 12px;
+    }
+    .comfy-button { padding: 10px 14px; font-size: 15px; }
+}
