@@ -25,6 +25,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 TARGET = "http://127.0.0.1:8188"
 ALLOW_ORIGIN = "*"
+FORWARD_ORIGIN = False
 HOP_BY_HOP = {
     "connection",
     "keep-alive",
@@ -35,6 +36,11 @@ HOP_BY_HOP = {
     "transfer-encoding",
     "upgrade",
 }
+
+# ComfyUI 自带一层防 CSRF 的 Origin 校验：请求里带外站 Origin（例如 WebView 的
+# http://tauri.localhost）会直接 403。网关既然自己负责 CORS，就把这两个头剥掉，
+# 让上游只看到「同源请求」。用 --forward-origin 可以关掉这个行为。
+STRIP_HEADERS = {"origin", "referer"}
 DEFAULT_TIMEOUT = 900  # 长任务：提交/轮询可能很慢，给足
 
 
@@ -88,7 +94,10 @@ class GatewayHandler(BaseHTTPRequestHandler):
 
         headers = {}
         for key, value in self.headers.items():
-            if key.lower() in HOP_BY_HOP or key.lower() in ("host", "content-length"):
+            lower = key.lower()
+            if lower in HOP_BY_HOP or lower in ("host", "content-length"):
+                continue
+            if not FORWARD_ORIGIN and lower in STRIP_HEADERS:
                 continue
             headers[key] = value
 
@@ -172,17 +181,23 @@ def lan_ips():
 
 
 def main():
-    global TARGET, ALLOW_ORIGIN
+    global TARGET, ALLOW_ORIGIN, FORWARD_ORIGIN
 
     parser = argparse.ArgumentParser(description="ComfyUI LAN gateway (CORS friendly)")
     parser.add_argument("--host", default="0.0.0.0", help="监听地址，默认 0.0.0.0")
     parser.add_argument("--port", type=int, default=8189, help="监听端口，默认 8189")
     parser.add_argument("--target", default="http://127.0.0.1:8188", help="ComfyUI 实际地址")
     parser.add_argument("--allow-origin", default="*", help="Access-Control-Allow-Origin，默认 *")
+    parser.add_argument(
+        "--forward-origin",
+        action="store_true",
+        help="把 Origin/Referer 原样转给 ComfyUI（默认剥掉，避免 ComfyUI 的 Origin 校验返回 403）",
+    )
     args = parser.parse_args()
 
     TARGET = args.target.rstrip("/")
     ALLOW_ORIGIN = args.allow_origin
+    FORWARD_ORIGIN = bool(args.forward_origin)
 
     server = ThreadingHTTPServer((args.host, args.port), GatewayHandler)
     server.daemon_threads = True
