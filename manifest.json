@@ -1,5 +1,5 @@
-{
-  "display_name": "ComfyUI 插图（移动端 / TauriTavern 版）",
+﻿{
+  "display_name": "ComfyUI 鎻掑浘锛堢Щ鍔ㄧ / TauriTavern 鐗堬級",
   "loading_order": 100,
   "requires": [],
   "optional": [],
@@ -7,5 +7,5 @@
   "css": "style.css",
   "author": "soulostar (original userscript) / iOS port",
   "version": "1.0.0",
-  "homePage": "https://github.com/"
+  "homePage": "https://github.com/HusnPuls/comfy-tavern-ios"
 }
